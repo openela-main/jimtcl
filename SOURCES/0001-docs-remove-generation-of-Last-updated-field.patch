@@ -1,0 +1,30 @@
+From 505cbc9ba972000ce70001ca520b95ff469c3050 Mon Sep 17 00:00:00 2001
+From: Antonio Cardace <acardace@redhat.com>
+Date: Tue, 18 Aug 2020 13:06:52 +0200
+Subject: [PATCH] docs: remove generation of "Last updated" field
+
+The generation of this field would make the resulting Tcl.html different between builds,
+as it records the time of generation, remove this as it causes jimtcl packages for different
+arches to have a file conflict on Tcl.html
+
+Resolves: #1853148
+---
+ Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index a803b07..59f349e 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -203,7 +203,7 @@ zlib.so: jim-zlib.c
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $(SHOBJ_LDFLAGS) -o $@ jim-zlib.o $(SH_LIBJIM) @LDLIBS_zlib@
+ 
+ Tcl.html: jim_tcl.txt
+-	@tclsh@ @srcdir@/make-index $> $^ | asciidoc -o $@ -d manpage - || cp @srcdir@/Tcl_shipped.html Tcl.html
++	@tclsh@ @srcdir@/make-index $> $^ | asciidoc --attribute footer-style=none -o $@ -d manpage - || cp @srcdir@/Tcl_shipped.html Tcl.html
+ 
+ clean:
+ 	rm -f *.o *.so *.dll *.exe lib*.a $(JIMSH) $(LIBJIM) Tcl.html _*.c
+-- 
+2.26.2
+
